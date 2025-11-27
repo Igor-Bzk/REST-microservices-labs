@@ -37,10 +37,10 @@ public class Student {
 		this.year = year;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -85,10 +85,10 @@ public class Student {
 	public void setavailabilities(String availabilities) {
 		this.availabilities = availabilities;
 	}
-	public int getYear() {
+	public Integer getYear() {
 		return year;
 	}
-	public void setYear(int year) {
+	public void setYear(Integer year) {
 		this.year = year;
 	}
 

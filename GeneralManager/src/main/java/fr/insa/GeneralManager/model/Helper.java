@@ -25,10 +25,10 @@ public class Helper {
 		this.id = id;
 		this.student_id = student_id;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public Student getStudent_id() {

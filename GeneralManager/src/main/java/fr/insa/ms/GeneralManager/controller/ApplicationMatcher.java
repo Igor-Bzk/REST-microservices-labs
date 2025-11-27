@@ -1,4 +1,4 @@
-package fr.insa.GeneralManager.controller;
+package fr.insa.ms.GeneralManager.controller;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +30,7 @@ public class ApplicationMatcher {
 	private List<Student> matchHelpersByTags(List<String> applicationTags){
 		Helper[] helpers = restTemplate.getForObject("http://HelperManager/helper", Helper[].class);
 	    List<Student> students = Arrays.stream(helpers)
-	        .map(helper -> restTemplate.getForObject("http://StudentManager/student/" + helper.getStudent_id(), Student.class))
+	        .map(helper -> helper.getStudent_id())
 	        .toList();
 	    return students.stream()
 	        .filter(student -> applicationTags.stream().allMatch(tag -> stringToList(student.getSkills()).contains(tag)))
@@ -39,11 +39,12 @@ public class ApplicationMatcher {
 	
 	@PostMapping("/submitApplication")
 	private List<Student> submitApplication(@RequestBody Application application, @QueryParam("cert") String cert){
-		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/"+application.getAsker_id().getId(), Certificate.class);
+		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/certificate/"+cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == application.getAsker_id().getId()){
-			restTemplate.postForObject("http://ApplicationManager/application/?cert="+application.getAsker_id().getId(), application, Void.class);
-			return matchHelpersByTags(stringToList(application.getKeywords()));
+			Application postedApplication = restTemplate.postForObject("http://ApplicationManager/application?cert="+cert, application, Application.class);
+			return matchHelpersByTags(stringToList(postedApplication.getKeywords()));
 		} else {
+			System.out.println("Authentification failed");
 			return null;
 		}
 		

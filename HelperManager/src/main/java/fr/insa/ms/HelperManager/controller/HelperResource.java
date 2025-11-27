@@ -35,7 +35,7 @@ public class HelperResource {
 	
 	@PostMapping
 	private Helper postHelper(@RequestBody Helper helper, @QueryParam("cert") String cert) {
-		Certificate certificate =  restTemplate.getForObject("http://AuthentificationManager/"+ helper.getStudent_id().getId(), Certificate.class);
+		Certificate certificate =  restTemplate.getForObject("http://AuthentificationManager/certificate/"+ cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == helper.getStudent_id().getId()){
 			return repository.save(helper);
 		} else {

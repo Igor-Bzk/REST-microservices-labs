@@ -41,10 +41,10 @@ public class Application {
 		this.status = status;
 		this.date = date;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public Student getAsker_id() {
