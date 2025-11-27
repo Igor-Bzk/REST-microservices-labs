@@ -1,4 +1,4 @@
-package fr.insa.ReviewManager.controller;
+package fr.insa.ms.ReviewManager.controller;
 
 import java.util.List;
 

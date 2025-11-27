@@ -3,6 +3,7 @@ package fr.insa.ms.ApplicationManager.controller;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import fr.insa.ApplicationManager.model.Application;
+import fr.insa.ApplicationManager.model.ApplicationStatus;
 import fr.insa.ApplicationManager.model.Certificate;
 import fr.insa.ms.ApplicationManager.ApplicationRepository;
 import jakarta.ws.rs.QueryParam;
@@ -35,6 +37,9 @@ public class ApplicationResource {
 	private Application postApplication(@RequestBody Application application, @QueryParam("cert") String cert) {
 		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/"+application.getAsker_id().getId(), Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == application.getAsker_id().getId()){
+			if (application.getStatus() == null){
+				application.setStatus(ApplicationStatus.waiting);
+			}
 			return repository.save(application);
 		} else {
 			return null;
@@ -44,5 +49,12 @@ public class ApplicationResource {
 	@GetMapping
 	private List<Application> getAllApplications() {
 		return repository.findAll();
+	}
+
+	@PatchMapping("/status/{id}")
+	private Application changeStatus(@PathVariable long id, @QueryParam("val") String status){
+		Application application = repository.findById(id).get();
+		application.setStatus(ApplicationStatus.valueOf(status));
+		return repository.save(application);
 	}
 }
