@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import fr.insa.ReviewManager.model.Certificate;
 import fr.insa.ReviewManager.model.Review;
 import fr.insa.ms.ReviewManager.ReviewRepository;
-import jakarta.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/review")
@@ -31,7 +31,7 @@ public class ReviewResource {
 	}
 	
 	@PostMapping
-	public Review postReview(@RequestBody Review review, @QueryParam("cert") String cert) {
+	public Review postReview(@RequestBody Review review, @RequestParam("cert") String cert) {
 		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/"+cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == review.getApplication_id().getAsker_id().getId()){
 			return repository.save(review);

@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import fr.insa.HelperManager.model.Certificate;
 import fr.insa.HelperManager.model.Helper;
 import fr.insa.ms.HelperManager.HelperRepository;
-import jakarta.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/helper")
@@ -34,7 +34,7 @@ public class HelperResource {
 	}
 	
 	@PostMapping
-	private Helper postHelper(@RequestBody Helper helper, @QueryParam("cert") String cert) {
+	private Helper postHelper(@RequestBody Helper helper, @RequestParam("cert") String cert) {
 		Certificate certificate =  restTemplate.getForObject("http://AuthentificationManager/certificate/"+ cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == helper.getStudent_id().getId()){
 			return repository.save(helper);

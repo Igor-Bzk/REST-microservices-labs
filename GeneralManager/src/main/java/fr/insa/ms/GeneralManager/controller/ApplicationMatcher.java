@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -14,7 +15,6 @@ import fr.insa.GeneralManager.model.Application;
 import fr.insa.GeneralManager.model.Certificate;
 import fr.insa.GeneralManager.model.Helper;
 import fr.insa.GeneralManager.model.Student;
-import jakarta.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/general")
@@ -38,7 +38,7 @@ public class ApplicationMatcher {
 	}
 	
 	@PostMapping("/submitApplication")
-	private List<Student> submitApplication(@RequestBody Application application, @QueryParam("cert") String cert){
+	private List<Student> submitApplication(@RequestBody Application application, @RequestParam("cert") String cert){
 		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/certificate/"+cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == application.getAsker_id().getId()){
 			Application postedApplication = restTemplate.postForObject("http://ApplicationManager/application?cert="+cert, application, Application.class);

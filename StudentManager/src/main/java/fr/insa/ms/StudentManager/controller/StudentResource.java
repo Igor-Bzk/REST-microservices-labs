@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import fr.insa.StudentManager.model.Certificate;
 import fr.insa.StudentManager.model.Student;
 import fr.insa.ms.StudentManager.StudentRepository;
-import jakarta.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/student")
@@ -49,9 +49,9 @@ public class StudentResource {
 	}
 
 	@PutMapping
-	private Student putStudent(@RequestBody Student student, @QueryParam("cert") String certificate){
-		Certificate cert = restTemplate.getForObject("http://AuthentificationManager/"+ student.getId(), Certificate.class);
-		if (certificate != null && cert.getStudent_id().getId() == student.getId()){
+	private Student putStudent(@RequestBody Student student, @RequestParam("cert") String cert){
+		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/certificate/"+ cert, Certificate.class);
+		if (certificate != null && certificate.getStudent_id().getId() == student.getId()){
 			return repository.save(student);
 		} else {
 			return null;

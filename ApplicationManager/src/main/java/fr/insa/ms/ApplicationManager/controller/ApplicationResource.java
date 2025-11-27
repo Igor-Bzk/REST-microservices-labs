@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -16,7 +17,6 @@ import fr.insa.ApplicationManager.model.Application;
 import fr.insa.ApplicationManager.model.ApplicationStatus;
 import fr.insa.ApplicationManager.model.Certificate;
 import fr.insa.ms.ApplicationManager.ApplicationRepository;
-import jakarta.ws.rs.QueryParam;
 
 @RestController
 @RequestMapping("/application")
@@ -37,7 +37,7 @@ public class ApplicationResource {
 	}
 	
 	@PostMapping
-	private Application postApplication(@RequestBody Application application, @QueryParam("cert") String cert) {
+	private Application postApplication(@RequestBody Application application, @RequestParam("cert") String cert) {
 		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/certificate/"+ cert, Certificate.class);
 		if (certificate != null && certificate.getStudent_id().getId() == application.getAsker_id().getId()){
 			if (application.getStatus() == null){
@@ -54,8 +54,8 @@ public class ApplicationResource {
 		return repository.findAll();
 	}
 
-	@GetMapping("/status")
-	private Application changeStatus(@QueryParam("id") long id, @QueryParam("val") String status){
+	@PatchMapping("/status")
+	private Application changeStatus(@RequestParam("id") long id, @RequestParam("val") String status){
 		System.out.println(id + status);
 		Application application = repository.findById(id).get();
 		application.setStatus(ApplicationStatus.valueOf(status));
