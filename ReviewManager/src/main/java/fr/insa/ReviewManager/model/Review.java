@@ -18,21 +18,25 @@ public class Review {
 	@ManyToOne
 	@JoinColumn(name = "application_id", nullable = false)
 	Application application_id;
-	int rating;
+	Integer rating;
+	@ManyToOne
+	@JoinColumn(name = "helper_id", nullable = false)
+	Helper helper_id;
 	
 	public Review(){}
 	
-	public Review(Integer id, String text, Application application_id, int rating) {
+	public Review(Integer id, String text, Application application_id, Integer rating, Helper helper_id) {
 		super();
 		this.id = id;
 		this.text = text;
 		this.application_id = application_id;
 		this.rating = rating;
+		this.helper_id = helper_id;
 	}
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getText() {
@@ -47,11 +51,19 @@ public class Review {
 	public void setApplication_id(Application application_id) {
 		this.application_id = application_id;
 	}
-	public int getRating() {
+	public Integer getRating() {
 		return rating;
 	}
-	public void setRating(int rating) {
+	public void setRating(Integer rating) {
 		this.rating = rating;
+	}
+
+	public Helper getHelper_id(){
+		return this.helper_id;
+	}
+
+	public void setHelper_id(Helper helper_id){
+		this.helper_id = helper_id;
 	}
 
 }

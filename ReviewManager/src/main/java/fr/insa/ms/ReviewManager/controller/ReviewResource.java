@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import fr.insa.ReviewManager.model.Application;
 import fr.insa.ReviewManager.model.Certificate;
 import fr.insa.ReviewManager.model.Review;
 import fr.insa.ms.ReviewManager.ReviewRepository;
@@ -20,6 +21,7 @@ import fr.insa.ms.ReviewManager.ReviewRepository;
 @RequestMapping("/review")
 public class ReviewResource {
 	
+	@Autowired
 	ReviewRepository repository;
 
 	@Autowired
@@ -32,8 +34,9 @@ public class ReviewResource {
 	
 	@PostMapping
 	public Review postReview(@RequestBody Review review, @RequestParam("cert") String cert) {
-		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/"+cert, Certificate.class);
-		if (certificate != null && certificate.getStudent_id().getId() == review.getApplication_id().getAsker_id().getId()){
+		Certificate certificate = restTemplate.getForObject("http://AuthentificationManager/certificate/"+cert, Certificate.class);
+		Application application = restTemplate.getForObject("http://ApplicationManager/application/"+review.getApplication_id().getId(), Application.class);
+		if (certificate != null && certificate.getStudent_id().getId() == application.getAsker_id().getId()){
 			return repository.save(review);
 		} else {
 			return null;
