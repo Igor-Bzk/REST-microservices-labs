@@ -1,5 +1,6 @@
 package fr.insa.AuthentificationManager.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,14 +12,23 @@ import jakarta.persistence.Table;
 public class Student {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
 	Integer id;
+	@Schema(examples = "Jean")
 	String name;
+	@Schema(example = "Quins")
 	String surname;
+	@Schema(example = "quins@insa-toulouse.fr")
 	String email;
+	@Schema(example = "INSA Toulouse")
 	String school;
+	@Schema(example = "Maths, Physics, Linguistics")
 	String course;
+	@Schema(example = "MonkeyType")
 	String skills;
+	@Schema(example = "thursday")
 	String availabilities;
+	@Schema(example = "2023")
 	Integer year;
 
 	public Student(){}

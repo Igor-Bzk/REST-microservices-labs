@@ -50,7 +50,9 @@ public class AuthentificationResource {
 		repository.save(new Certificate(certif, postedStudent));
 		return certif;
 	}
-	
+
+	// Called by other services to retrieve the student_id for a given certificate_id.
+	// This allows others services to check if the certificate exists and if the student_id matches the certificate's student_id.
 	@GetMapping("/{certificate}")
 	private Certificate getCertificate(@PathVariable String certificate) {
 		return repository.findById(certificate).orElse(null);
